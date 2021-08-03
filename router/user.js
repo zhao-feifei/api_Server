@@ -9,10 +9,9 @@ const expressJoi = require("@escook/express-joi");
 const { reg_login_schema } = require("../schema/user");
 
 //注册新用户
-router.post("/reguser", userHandler.regUser);
-// expressJoi(reg_login_schema)
-//上面这个验证规则有BUG，废弃掉了
+router.post("/reguser", expressJoi(reg_login_schema), userHandler.regUser);
+
 //登录
-router.post("/login", userHandler.login);
+router.post("/login", expressJoi(reg_login_schema), userHandler.login);
 
 module.exports = router;

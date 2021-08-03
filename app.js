@@ -21,17 +21,30 @@ app.use((req, res, next) => {
   next();
 });
 
+//配置解析token的中间件   要在路由之前
+const expressJWT = require("express-jwt");
+const config = require("./config");
+//path:[/^\/api/是指api开头的不需要进行身份认证
+app.use(
+  expressJWT({ secret: config.jwtSecretKey }).unless({ path: [/^\/api/] })
+);
+
 //导入用户路由模块
 const userRouter = require("./router/user");
 
 app.use("/api", userRouter);
 
+//导入并使用用户信息的路由模块
+const userinfoRouter = require("./router/userinfo");
+app.use("/my", userinfoRouter);
+
+const jwt = require("express-jwt");
 // 定义错误级别中间;
 app.use(function (err, req, res, next) {
   //验证失败导致的错误
-  if (err instanceof joi.ValidationError) {
-    return res.cc(err);
-  }
+  if (err instanceof joi.ValidationError) return res.cc(err);
+  //身份认证失败后的错误
+  if (err.name === "UnauthorizedError") return res.cc("身份认证失败!");
   //未知的错误
   res.cc(err);
 });
