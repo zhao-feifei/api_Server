@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 
 const joi = require("@hapi/joi");
+const jwt = require("express-jwt");
 // 导入并配置cors中间件
 const cors = require("cors");
 app.use(cors());
@@ -31,14 +32,16 @@ app.use(
 
 //导入用户路由模块
 const userRouter = require("./router/user");
-
 app.use("/api", userRouter);
 
 //导入并使用用户信息的路由模块
 const userinfoRouter = require("./router/userinfo");
 app.use("/my", userinfoRouter);
 
-const jwt = require("express-jwt");
+//导入并使用文章分类的路由模块
+const artCateRouter = require("./router/artcate");
+app.use("/my/article", artCateRouter);
+
 // 定义错误级别中间;
 app.use(function (err, req, res, next) {
   //验证失败导致的错误
