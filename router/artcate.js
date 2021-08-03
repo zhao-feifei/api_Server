@@ -1,8 +1,10 @@
 //这是文章分类的路由模块
 
 const express = require("express");
-const expressJoi = require("@escook/express-joi");
 const router = express.Router();
+const expressJoi = require("@escook/express-joi");
+
+//导入文章的路由处理函数模块
 const artcate_handler = require("../router_handler/artcate");
 const {
   add_cate_schema,

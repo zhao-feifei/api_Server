@@ -42,6 +42,11 @@ app.use("/my", userinfoRouter);
 const artCateRouter = require("./router/artcate");
 app.use("/my/article", artCateRouter);
 
+//导入并使用文章路由模块
+const articleRouter = require("./router/article");
+//挂载访问前缀
+app.use("/my/article", articleRouter);
+
 // 定义错误级别中间;
 app.use(function (err, req, res, next) {
   //验证失败导致的错误
