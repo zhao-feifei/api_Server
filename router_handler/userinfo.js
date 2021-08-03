@@ -46,7 +46,32 @@ exports.updatePassword = (req, res) => {
     //执行成功但更新失败
     if (results.length !== 1) return res.cc("用户不存在！");
     //判断用户输入的旧密码是否正确
+    const bcrypt = require("bcryptjs");
+    const compareResult = bcrypt.compareSync(
+      req.body.oldPwd,
+      results[0].password
+    );
+    if (!compareResult) return res.cc("原密码错误！");
 
-    res.cc("ok");
+    // //对新密码进行加密后写入数据库
+    const sql = "update ev_users set password=? where id=?";
+    const newPwd = bcrypt.hashSync(req.body.newPwd, 10);
+    db.query(sql, [newPwd, req.user.id], (err, results) => {
+      if (err) return res.cc(err);
+      if (results.affectedRows !== 1) return res.cc("更新密码失败！");
+      res.cc("更新密码成功!", 0);
+    });
+
+    // res.cc("ok");
+  });
+};
+
+//更新用户头像的处理函数
+exports.updateAvatar = (req, res) => {
+  const sql = "update ev_users set user_pic=? where id=? ";
+  db.query(sql, [req.body.avatar, req.user.id], (err, results) => {
+    if (err) return res.cc(err);
+    if (results.affectedRows !== 1) return res.cc("更新头像失败!");
+    return res.cc("更新头像成功！", 0);
   });
 };
