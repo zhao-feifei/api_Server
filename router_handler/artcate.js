@@ -34,7 +34,7 @@ exports.addArticleCates = (req, res) => {
     db.query(sql, req.body, (err, results) => {
       if (err) return res.cc(err);
       if (results.affectedRows !== 1) return res.cc("新增文章分类失败!");
-      res.cc("新增文章分类成功!");
+      res.cc("新增文章分类成功!", 0);
     });
   });
 };

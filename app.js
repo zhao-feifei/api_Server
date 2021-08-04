@@ -57,6 +57,8 @@ app.use(function (err, req, res, next) {
   res.cc(err);
 });
 
+//托管静态资源文件
+app.use("/uploads", express.static("./uploads"));
 app.listen(3007, () => {
   console.log("api server running at http://127.0.0.1:3007");
 });
